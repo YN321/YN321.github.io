@@ -75,39 +75,63 @@
                                 <ul id="menu-main-navigation-1" class="sf-menu">
 
                                     <li class="menu-item menu-item-has-children arki-normal-menu" style = 'float: right'>
-                                        <a class="sf-with-ul-pre" style = 'margin-right:0px;text-align:right;font-weight: bold;'>模型切换</a>
+                                        <a class="sf-with-ul-pre" id="project_1" style = 'margin-right:0px;text-align:right;font-weight: bold;'>初始化</a>
                                         <ul class="sub-menu">
                                             <li class="menu-item menu-item-has-children" data-size="60">
-                                                <a href="blog-full-right-sidebar.html" class="sf-with-ul-pre">甲方项目</a>
+                                                <a href="blog-full-right-sidebar.html"  class="sf-with-ul-pre">五联东苑城中村项目</a>
+
+                                                <!-- 文本内容传递 -->
+                                                <script>
+                                                    function itemdata_1(data){
+                                                        // alert("五联东苑城中村项目/"+data);  //测试用弹窗
+                                                        document.getElementById('project_1').innerText = "五联东苑城中村项目/"+data
+                                                    }
+                                                </script>
+                                                <!-- 列表数据 -->
                                                 <ul class="sub-menu">
-                                                    <li class="menu-item"><a href="blog-full-right-sidebar.html">Blog Full Right Sidebar</a></li>
-                                                    <li class="menu-item"><a href="blog-full-left-sidebar.html">Blog Full Left Sidebar</a></li>
-                                                    <li class="menu-item"><a href="blog-full-both-sidebar.html">Blog Full Both Sidebar</a></li>
+                                                    <li class="menu-item"><a href="#" onclick="itemdata_1(this.innerText)">数据采集阶段</a></li>
+                                                    <li class="menu-item"><a href="#" onclick="itemdata_1(this.innerText)">设计阶段/20%</a></li>
+                                                    <li class="menu-item"><a href="#" onclick="itemdata_1(this.innerText)">设计阶段/40%</a></li>
                                                 </ul>
                                             </li>
                                             <li class="menu-item menu-item-has-children" data-size="60">
-                                                <a href="blog-grid-3-columns-no-space.html" class="sf-with-ul-pre">建筑师项目</a>
+                                                <a href="blog-grid-3-columns-no-space.html" class="sf-with-ul-pre">西溪湿地博物馆项目</a>
+                                                
+                                                <!-- 文本内容传递 -->
+                                                <script>
+                                                    function itemdata_2(data){
+                                                        document.getElementById('project_1').innerText = "西溪湿地博物馆项目/"+data
+                                                    }
+                                                </script>
+                                                <!-- 列表数据 -->
                                                 <ul class="sub-menu">
-                                                    <li class="menu-item"><a href="blog-grid-2-columns.html">Blog Grid 2 Columns</a></li>
-                                                    <li class="menu-item"><a href="blog-grid-3-columns.html">Blog Grid 3 Columns</a></li>
-                                                    <li class="menu-item"><a href="blog-grid-4-columns.html">Blog Grid 4 Columns</a></li>
-                                                    <li class="menu-item"><a href="blog-grid-2-columns-no-space.html">Blog Grid 2 Columns No Space</a></li>
-                                                    <li class="menu-item"><a href="blog-grid-3-columns-no-space.html">Blog Grid 3 Columns No Space</a></li>
-                                                    <li class="menu-item"><a href="blog-grid-4-columns-no-space.html">Blog Grid 4 Columns No Space</a></li>
+                                                    <li class="menu-item"><a href="#" onclick="itemdata_2(this.innerText)">数据采集阶段</a></li>
+                                                    <li class="menu-item"><a href="#" onclick="itemdata_2(this.innerText)">设计阶段/20%</a></li>
+                                                    <li class="menu-item"><a href="#" onclick="itemdata_2(this.innerText)">设计阶段/40%</a></li>
+                                                    <li class="menu-item"><a href="#" onclick="itemdata_2(this.innerText)">设计阶段/60%</a></li>
+                                                    <li class="menu-item"><a href="#" onclick="itemdata_2(this.innerText)">设计阶段/80%</a></li>
+                                                    <li class="menu-item"><a href="#" onclick="itemdata_2(this.innerText)">公示阶段</a></li>
                                                 </ul>
                                             </li>
                                             <li class="menu-item menu-item-has-children" data-size="60">
-                                                <a href="blog-3-columns-with-frame.html" class="sf-with-ul-pre">公众项目</a>
+                                                <a href="blog-3-columns-with-frame.html" class="sf-with-ul-pre">地铁9号线项目</a>
+                                                <!-- 文本内容传递 -->
+                                                <script>
+                                                    function itemdata_3(data){
+                                                        document.getElementById('project_1').innerText = "地铁9号线项目/"+data
+                                                    }
+                                                </script>
+                                                <!-- 列表数据 -->
                                                 <ul class="sub-menu">
-                                                    <li class="menu-item"><a href="blog-2-columns-with-frame.html">Blog 2 Columns With Frame</a></li>
-                                                    <li class="menu-item"><a href="blog-3-columns-with-frame.html">Blog 3 Columns With Frame</a></li>
-                                                    <li class="menu-item"><a href="blog-4-columns-with-frame.html">Blog 4 Columns With Frame</a></li>
-                                                    <li class="menu-item"><a href="blog-2-columns.html">Blog 2 Columns</a></li>
-                                                    <li class="menu-item"><a href="blog-3-columns.html">Blog 3 Columns</a></li>
-                                                    <li class="menu-item"><a href="blog-4-columns.html">Blog 4 Columns</a></li>                                    
+                                                    <li class="menu-item"><a href="#" onclick="itemdata_3(this.innerText)">数据采集阶段</a></li>
+                                                    <li class="menu-item"><a href="#" onclick="itemdata_3(this.innerText)">设计阶段/20%</a></li>
+                                                    <li class="menu-item"><a href="#" onclick="itemdata_3(this.innerText)">设计阶段/40%</a></li>
+                                                    <li class="menu-item"><a href="#" onclick="itemdata_3(this.innerText)">设计阶段/60%</a></li>
+                                                    <li class="menu-item"><a href="#" onclick="itemdata_3(this.innerText)">设计阶段/80%</a></li>
+                                                    <li class="menu-item"><a href="#" onclick="itemdata_3(this.innerText)">公示阶段</a></li>                                    
                                                 </ul>
                                             </li>
-                                            <li class="menu-item" data-size="60"><a href="singleblog.html">导入新模型</a></li>
+                                            <li class="menu-item" data-size="60"><a href="#" onclick="alet_new()">创建新的项目</a></li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -121,7 +145,7 @@
                                             
                                         </div>
 
-                                        <!-- 点击特效 -->
+                                        <!-- 点击效果 -->
                                         <script>
                                         function display(id){  
                                             var traget=document.getElementById(id);  
@@ -254,6 +278,74 @@
                     <a href="#url" target="_blank" class="gdlr-core-social-network-icon" title="linkedin" style="color: #cccccc; margin-right: 30px;" rel="noopener"><i class="fa fa-linkedin"></i></a>
                     <a href="#" target="_blank" class="gdlr-core-social-network-icon" title="pinterest" style="color: #cccccc; margin-right: 30px;" rel="noopener"><i class="fa fa-pinterest-p"></i></a>
                     <a href="#url" target="_blank" class="gdlr-core-social-network-icon" title="twitter" style="color: #cccccc; margin-right: 30px;" rel="noopener"><i class="fa fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="alet_new_project" class="arki-page-wrapper"  style="height: 500px;width: 500px;overflow:hidden; z-index: 9999;position: fixed;left: 30%;top: 5%;" >
+        <div class="gdlr-core-page-builder-body"  style="background-color: #ffffff;">
+            <img id="shut_down" onclick="hidder()" href='#' src="static/icon/cross.png" alt="" width="30px" style="position: relative;;left:90% ;margin-right: 50px;margin-top: 20px;margin-bottom: 10px;">
+            <div class="gdlr-core-pbf-wrapper" style="padding: 20px 0px 35px 0px;">
+                
+                <div class="gdlr-core-pbf-background-wrap" style="background-color: #ffffff;"></div>
+                <div class="gdlr-core-pbf-wrapper-content gdlr-core-js">
+                    <div class="gdlr-core-pbf-wrapper-container clearfix gdlr-core-container">
+                        <div class="gdlr-core-pbf-column gdlr-core-column-60 gdlr-core-column-first" data-skin="Contact Form" id="gdlr-core-column-12647">
+                            <div class="gdlr-core-pbf-column-content-margin gdlr-core-js">
+                                <div class="gdlr-core-pbf-background-wrap"></div>
+                                <div class="gdlr-core-pbf-column-content clearfix gdlr-core-js" style="max-width: 760px;">
+                                    <div class="gdlr-core-pbf-element">
+                                        <div class="gdlr-core-title-item gdlr-core-item-pdb clearfix gdlr-core-center-align gdlr-core-title-item-caption-bottom gdlr-core-item-pdlr" style="padding-bottom: 20px;">
+                                            <div class="gdlr-core-title-item-title-wrap">
+                                                <h3 class="gdlr-core-title-item-title gdlr-core-skin-title" style="font-size: 39px; font-weight: 600; letter-spacing: 0px; text-transform: none;">
+                                                    创建新的城市项目 <span class="gdlr-core-title-item-title-divider gdlr-core-skin-divider"></span>
+                                                </h3>
+                                            </div>
+                                            <span class="gdlr-core-title-item-caption gdlr-core-info-font gdlr-core-skin-caption" style="font-size: 19px; font-style: normal; letter-spacing: 0px;">
+                                                并发布相关数据采集问卷
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="gdlr-core-pbf-element">
+                                        <div class="gdlr-core-contact-form-7-item gdlr-core-item-pdlr gdlr-core-item-pdb">
+                                            <div role="form" class="wpcf7" id="wpcf7-f1979-p1964-o1" lang="en-US" dir="ltr">
+                                                <div class="screen-reader-response">
+                                                    <p role="status" aria-live="polite" aria-atomic="true"></p>
+                                                    <ul></ul>
+                                                </div>
+
+                                                <form method="post" action="contactform/contactengine.php">
+                                                    
+                                                    <input type="text" name="Name" id="Name" placeholder="项目名称：" class="input">
+                                                    
+                                                    <!-- <input type="text" name="City" id="City" placeholder="项目地址：" class="input"> -->
+
+                                                    <!-- <input type="text" name="Email" id="Email" placeholder="Email:" class="input"> -->
+                                                    
+                                                    <textarea name="Message" rows="20" cols="20" id="Message" placeholder="项目简介：" class="input" style="height: 100px;"></textarea>
+
+                                                    <input type="submit" name="submit" value="确认创建" class="submit-button" style="margin: 0 auto;">
+
+                                                    <script type="text/javascript">
+                                                        document.getElementById('alet_new_project').style.display="none";
+                                                        function alet_new(){
+                                                            document.getElementById('alet_new_project').style.display="";
+                                                        }
+                                                        function hidder(){
+                                                            document.getElementById('alet_new_project').style.display="none";
+                                                        }
+                                                    </script>
+
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
