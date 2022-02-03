@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- 引入js -->
+    <script src="js/three.js"></script>
+    <script src="js/OrbitControls.js"></script>
+    <script src="js/OBJLoader.js"></script>
+    <script src="js/TrackballControls.js"></script>
+    <script src="js/3DMLoader.js"></script>
+    <script src="js/MTLLoader.js"></script>
+    <!-- <script type="module">
+        import { MTLLoader } from './js/MTLLoader.js';
+        console.log(MTLLoader)
+    </script> -->
+
+    <style>
+        body{
+            /* 边距设为0，溢出隐藏 */
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+
+</head>
+<body>
+    <div id="webgl-output"></div>
+    <script>
+        function init(){
+
+            // 创建场景
+            const scene = new THREE.Scene();
+			// 创建相机（透视摄像机）参数：视野角度（FOV）/长宽比（aspect ratio）/近截面（near）和远截面（far）
+			const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
+            // 创建渲染器
+            const renderer = new THREE.WebGLRenderer();
+            // 设置初始颜色
+            renderer.setClearColor(new THREE.Color(0x404040));
+            // 设置窗口尺寸
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            // 设置渲染物体阴影
+            renderer.shadowMap.Enabled = true;
+            // 色调映射
+            renderer.toneMapping = THREE.ReinhardToneMapping;
+            renderer.toneMappingExposure = 3;
+
+            // 设置坐标系
+            var axes = new THREE.AxesHelper(20);
+            scene.add(axes);
+
+            // 创建地面
+            var planGeometry = new THREE.PlaneGeometry(100,100);
+            var planMaterial = new THREE.MeshStandardMaterial({color:0xcccccc});
+            var plan = new THREE.Mesh(planGeometry,planMaterial);
+            plan.rotation.x = -0.5*Math.PI;
+            plan.position.x = 15;
+            plan.position.y = 0;
+            plan.position.z = 0;
+            plan.castShadow = true;
+            plan.receiveShadow = true;
+            scene.add(plan);
+
+
+            // 添加立方体
+            var cubeGeometry = new THREE.BoxGeometry(4,4,4);
+            var cubeMaterial = new THREE.MeshLambertMaterial({color:0xff0000});
+            var cube = new THREE.Mesh(cubeGeometry,cubeMaterial);
+            cube.position.x = 0;
+            cube.position.y = 4;
+            cube.position.z = 0;
+            cube.castShadow = true;  // 显示阴影
+            scene.add(cube);
+
+            // 创建球体
+            var sphereGeometry = new THREE.SphereGeometry(2,20);
+            var sphereMaterial = new THREE.MeshLambertMaterial({color:0xff0000});
+            var sphere = new THREE.Mesh(sphereGeometry,sphereMaterial);
+            sphere.position.set(0,12,0);
+            sphere.castShadow = true;  // 显示阴影
+            scene.add(sphere);
+
+            // 导入模型
+            var loader = new THREE.OBJLoader();
+            var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.load('./models/test.mtl',(materials) => {
+                materials.preload();
+                loader.setMaterials(materials);
+                loader.load('./models/test.obj',(loadMesh) => {
+                    // console.log(loadMesh);
+                    // loadMesh.children.forEach(child => {
+                    //     child.material = materials;
+                    // });
+                    x = 0.01  // 等比缩放系数
+                    loadMesh.scale.set(x,x,x);
+                    loadMesh.castShadow = true;
+                    // 循环
+                    loadMesh.traverse((n) => {
+                        if(n.isMesh){
+                            n.castShadow = true;
+                            n.receiveShadow = true;
+                            if(n.material.map) n.material.map.anisotropy = 100;
+                        }
+                    })
+                    scene.add(loadMesh)
+
+                    // 动画函数
+                    let T0 = new Date();
+                    function render(){
+                        let T1 = new Date();
+                        t = T1-T0
+                        T0 = T1
+                        renderer.render(scene,camera);
+                        loadMesh.rotateY(0.0001*t)  // 每毫秒旋转0.001
+                        window.requestAnimationFrame(render)
+                    }
+                    window.requestAnimationFrame(render)
+                })
+
+            })
+
+
+            // loader.load('./models/test.obj',(loadMesh)=>{
+            //     console.log(loadMesh);
+            //     var material = new THREE.MeshLambertMaterial({color:0xffffff});
+            //     loadMesh.children.forEach(child => {
+            //         child.material = material;
+            //         // child.geometry.computeFaceNormals();
+            //         // child.geometry.computeVertexNormals();
+            //     });
+            //     x = 0.01  // 等比缩放系数
+            //     loadMesh.scale.set(x,x,x);
+            //     // loadMesh.rotation.x = -0.3;
+            //     scene.add(loadMesh)
+
+            //     // 动画函数
+            //     let T0 = new Date();
+            //     function render(){
+            //         let T1 = new Date();
+            //         t = T1-T0
+            //         T0 = T1
+            //         renderer.render(scene,camera);
+            //         loadMesh.rotateY(0.0001*t)  // 每毫秒旋转0.001
+            //         window.requestAnimationFrame(render)
+            //     }
+            //     window.requestAnimationFrame(render)
+            // });
+
+            // // Instantiate a Rhino3dmLoader
+            // const loader = new Rhino3dmLoader();
+            // loader.setLibraryPath( 'https://cdn.jsdelivr.net/npm/rhino3dm@0.15.0-beta/' );
+            // // Load a 3DM file
+            // loader.load(
+            //     // resource URL
+            //     './models/Rhino_Logo.3dm',
+            //     // called when the resource is loaded
+            //     function ( object ) {
+            //         scene.add( object );
+            //     },
+            //     // called as loading progresses
+            //     function ( xhr ) {
+            //         console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+            //     },
+            //     // called when loading has errors
+            //     function ( error ) {
+            //         console.log( 'An error happened' );
+            //     }
+            // );
+            
+
+
+
+            // 创建光源
+            var spotLight = new THREE.SpotLight(0xffa95c,4);
+            spotLight.position.set(5,10,-5);
+            spotLight.angle = Math.PI/3;
+            spotLight.castShadow = true;
+            // 阴影设置
+            spotLight.shadow.bias = -0.0001;
+            spotLight.shadow.penumbra = 0.05;  // 衰减
+            spotLight.shadow.mapSize.width = 1024;
+            spotLight.shadow.mapSize.innerHeight = 1024;
+            scene.add(spotLight);
+
+            // 创建环境光
+            ambientLight = new THREE.AmbientLight(0x404040,0.2)
+            scene.add(ambientLight)
+
+            // 穹顶光
+            const hemiLight = new THREE.HemisphereLight(0xffeeb1,0x080820,1);
+            scene.add(hemiLight);
+
+            // 摄像机设置
+            camera.position.x = -30;
+            camera.position.y = 40;
+            camera.position.z = 30;
+            camera.lookAt(scene.position);
+
+            // 渲染器添加至网页
+            document.getElementById('webgl-output').appendChild(renderer.domElement);
+            renderer.render(scene,camera);
+
+            // 动画函数
+            let T0 = new Date();
+            function render(){
+                let T1 = new Date();
+                t = T1-T0
+                T0 = T1
+                renderer.render(scene,camera);
+                cube.rotateX(0.001*t)  // 每毫秒旋转0.001
+                window.requestAnimationFrame(render)
+            }
+
+            // 循环
+            // setInterval(render,16)  // 16ms/帧
+
+            // 请求动画帧
+            window.requestAnimationFrame(render)
+
+
+            // 创建controls对象
+            var controls = new THREE.OrbitControls(camera,renderer.domElement)
+            // 监听鼠标
+            controls.addEventListener('change',()=>{
+                renderer.render(scene,camera);
+            })
+        }
+        window.onload = init  // 加载完页面后载入init
+
+
+    </script>
+</body>
+</html>
