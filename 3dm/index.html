@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模型导入实验</title>
+    <!-- 引入js -->
+    <script src="js/three.js"></script>
+    <script src="js/OrbitControls.js"></script>
+    <script src="js/OBJLoader.js"></script>
+    <script src="js/TrackballControls.js"></script>
+    <script src="js/3DMLoader.js"></script>
+    <script src="js/MTLLoader.js"></script>
+
+    <style>
+        body{
+            /* 边距设为0，溢出隐藏 */
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+
+</head>
+
+<body>
+    <!-- 将在这个div里进行输出 -->
+    <div id="webgl-output"></div>
+    <script>
+        function init(){
+
+            // 创建场景
+            const scene = new THREE.Scene();
+			// 创建相机（透视摄像机）参数：视野角度（FOV）/长宽比（aspect ratio）/近截面（near）和远截面（far）
+			const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
+            // 创建渲染器
+            const renderer = new THREE.WebGLRenderer();
+            // 设置初始颜色
+            renderer.setClearColor(new THREE.Color(0x404040));
+            // 设置窗口尺寸
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            // 设置渲染物体阴影
+            renderer.shadowMapEnabled = true;
+            // 色调映射
+            renderer.toneMapping = THREE.ReinhardToneMapping;
+            renderer.toneMappingExposure = 2;
+
+            // // 设置坐标系
+            // var axes = new THREE.AxesHelper(20);
+            // scene.add(axes);
+
+            // 创建地面
+            var planGeometry = new THREE.PlaneGeometry(100,100);
+            var planMaterial = new THREE.MeshStandardMaterial({color:0xcccccc});
+            var plan = new THREE.Mesh(planGeometry,planMaterial);
+            plan.rotation.x = -0.5*Math.PI;
+            plan.position.x = 0;
+            plan.position.y = 0;
+            plan.position.z = 0;
+            // plan.castShadow = true;
+            plan.receiveShadow = true;
+            scene.add(plan);
+
+
+            // 添加立方体
+            var cubeGeometry = new THREE.BoxGeometry(4,4,4);
+            var cubeMaterial = new THREE.MeshLambertMaterial({color:0xff0000});
+            var cube = new THREE.Mesh(cubeGeometry,cubeMaterial);
+            cube.position.x = 0;
+            cube.position.y = 4;
+            cube.position.z = 0;
+            cube.castShadow = true;  // 显示阴影
+            scene.add(cube);
+
+            // 创建球体
+            var sphereGeometry = new THREE.SphereGeometry(2,20);
+            var sphereMaterial = new THREE.MeshLambertMaterial({color:0xff0000});
+            var sphere = new THREE.Mesh(sphereGeometry,sphereMaterial);
+            sphere.position.set(0,12,0);
+            sphere.castShadow = true;  // 显示阴影
+            scene.add(sphere);
+
+            // 导入模型
+            var loader = new THREE.OBJLoader();
+            var mtlLoader = new THREE.MTLLoader();
+            mtlLoader.load('./models/test.mtl',(materials) => {
+                materials.preload();
+                loader.setMaterials(materials);
+                loader.load('./models/test.obj',(loadMesh) => {
+                    // console.log(loadMesh);
+                    // loadMesh.children.forEach(child => {
+                    //     child.material = materials;
+                    // });
+                    x = 0.01  // 等比缩放系数
+                    loadMesh.scale.set(x,x,x);
+                    loadMesh.castShadow = true;
+                    // 循环
+                    loadMesh.traverse((n) => {
+                        if(n.isMesh){
+                            n.castShadow = true;
+                            n.receiveShadow = true;
+                            if(n.material.map) n.material.map.anisotropy = 100;
+                        }
+                    })
+                    scene.add(loadMesh)
+
+                    // 动画函数
+                    let T0 = new Date();
+                    function render(){
+                        let T1 = new Date();
+                        t = T1-T0
+                        T0 = T1
+                        renderer.render(scene,camera);
+                        loadMesh.rotateY(0.0001*t)  // 每毫秒旋转0.001
+                        window.requestAnimationFrame(render)
+                    }
+                    window.requestAnimationFrame(render)
+                })
+            })
+
+            // 平行光
+            const directionalLight = new THREE.DirectionalLight( 0xffffff, 2, 100);
+            directionalLight.castShadow = true;
+            directionalLight.position.set(100,100,0)
+            directionalLight.shadow.mapSize.width = 2000;
+            directionalLight.shadow.mapSize.height = 2000;
+            directionalLight.shadow.camera.near = 0.1;
+            directionalLight.shadow.camera.far = 1000;
+            s = 100
+            directionalLight.shadow.camera.left = -s; //产生阴影距离位置的最左边位置
+            directionalLight.shadow.camera.right = s; //最右边
+            directionalLight.shadow.camera.top = s; //最上边
+            directionalLight.shadow.camera.bottom = -s; //最下面
+            directionalLight.shadow.bias = -0.0001;
+            scene.add( directionalLight );
+
+            //Create a helper for the shadow camera (optional)
+            // const helper = new THREE.CameraHelper( directionalLight.shadow.camera );
+            // scene.add( helper );
+
+
+            // 创建聚光灯光源
+            var spotLight = new THREE.SpotLight(0xffa95c, 2);
+            spotLight.position.set(10,20,0);
+            spotLight.angle = Math.PI/5;
+            spotLight.castShadow = true;
+            // 阴影设置
+            spotLight.shadow.bias = -0.0001;
+            spotLight.shadow.penumbra = 0.05;  // 衰减
+            spotLight.shadow.mapSize.width = 1024;
+            spotLight.shadow.mapSize.innerHeight = 1024;
+            scene.add(spotLight);
+
+            // 创建环境光
+            ambientLight = new THREE.AmbientLight(0x404040,0.2)
+            scene.add(ambientLight)
+
+            // 穹顶光
+            const hemiLight = new THREE.HemisphereLight(0xffeeb1,0x080820,1);
+            scene.add(hemiLight);
+
+            // 摄像机设置
+            camera.position.set(-60,60,60)
+            camera.lookAt(scene.position);
+
+            // 渲染器添加至网页
+            document.getElementById('webgl-output').appendChild(renderer.domElement);
+            renderer.render(scene,camera);
+
+            // 动画函数
+            let T0 = new Date();
+            function render(){
+                let T1 = new Date();
+                t = T1-T0
+                T0 = T1
+                renderer.render(scene,camera);
+                cube.rotateX(0.001*t)  // 每毫秒旋转0.001
+                window.requestAnimationFrame(render)
+            }
+
+            // 循环
+            // setInterval(render,16)  // 16ms/帧
+
+            // 请求动画帧
+            window.requestAnimationFrame(render)
+
+
+            // 创建controls对象
+            var controls = new THREE.OrbitControls(camera,renderer.domElement)
+            // 监听鼠标
+            controls.addEventListener('change',()=>{
+                renderer.render(scene,camera);
+            })
+        }
+        window.onload = init  // 加载完页面后载入init
+
+
+    </script>
+</body>
+</html>
